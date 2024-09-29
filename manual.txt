@@ -1,0 +1,121 @@
+A continuación te muestro un ejemplo de una página web que lee un archivo CSV y muestra su contenido con un efecto de texto corriendo de derecha a izquierda, imitando un cartel informativo.
+
+### HTML (index.html)
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Anuncio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="marquee">
+        <div class="marquee-inner" id="marquee-inner"></div>
+    </div>
+    <input type="file" id="fileInput" accept=".csv">
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+### CSS (styles.css)
+```css
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+.marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    border: 2px solid #333;
+    width: 80%;
+    background-color: #fff;
+}
+
+.marquee-inner {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 10s linear infinite;
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+input[type="file"] {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+```
+
+### JavaScript (script.js)
+```javascript
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'text/csv') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            displayCSVContent(text);
+        };
+        reader.readAsText(file);
+    } else {
+        alert('Por favor, seleccione un archivo CSV.');
+    }
+});
+
+function displayCSVContent(csvText) {
+    const lines = csvText.split('\n');
+    let content = '';
+    lines.forEach(line => {
+        const columns = line.split(',');
+        content += columns.join(' ') + ' | ';
+    });
+    document.getElementById('marquee-inner').textContent = content;
+}
+```
+
+### Explicación
+1. **HTML (index.html)**: Contiene la estructura básica de la página con un contenedor para el efecto de texto corriendo y un input para seleccionar el archivo CSV.
+2. **CSS (styles.css)**: Define los estilos para el efecto de texto corriendo y la animación de parallax.
+3. **JavaScript (script.js)**: Maneja la carga del archivo CSV y muestra su contenido dentro del contenedor con el efecto de texto corriendo.
+
+Para usar este ejemplo, guarda cada sección en su respectivo archivo (`index.html`, `styles.css`, `script.js`). Luego, abre `index.html` en un navegador, selecciona un archivo CSV y verás el contenido desplazándose de derecha a izquierda.
+
+
+
+Claro, aquí tienes un ejemplo del contenido de un archivo CSV:
+
+### contenido.csv
+```csv
+Mensaje,Prioridad,Fecha
+"Bienvenido a nuestra tienda",Alta,2023-06-01
+"Descuento del 20% en todos los productos",Media,2023-06-15
+"Próxima venta especial el 1 de julio",Baja,2023-06-20
+```
+
+Este archivo CSV tiene tres columnas: `Mensaje`, `Prioridad` y `Fecha`, y tres filas de datos con distintos mensajes.
+
+### Cómo se vería el contenido mostrado en la página web
+
+Cuando subas este archivo CSV a la página, el contenido que se desplazaría de derecha a izquierda sería:
+
+```
+Bienvenido a nuestra tienda Alta 2023-06-01 | Descuento del 20% en todos los productos Media 2023-06-15 | Próxima venta especial el 1 de julio Baja 2023-06-20 |
+```
+
+Asegúrate de tener el archivo CSV con el contenido anterior guardado como `contenido.csv`, y súbelo utilizando el input de archivo en la página web para ver el efecto.
